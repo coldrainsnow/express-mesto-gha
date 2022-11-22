@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "app.cjs",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node app.cjs",
+    "dev": "nodemon app.cjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint"
   },
