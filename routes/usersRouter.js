@@ -6,9 +6,9 @@ const {
   createUser,
   updateUserInfo,
   updateUserAvatar,
-} = require("../controllers/users.cjs");
+} = require("../controllers/users.js");
 
-router.get("/users", getAllUsers);
+router.get("/", getAllUsers);
 router.get("/:userId", getUserById);
 router.post("/", createUser);
 router.patch("/me", updateUserInfo);
