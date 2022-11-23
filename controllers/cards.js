@@ -1,4 +1,4 @@
-const Card = require("../models/card.js");
+const Card = require("../models/card");
 
 const serverError = 500;
 const badRequest = 400;
@@ -8,9 +8,9 @@ const ok = 200;
 module.exports.getAllCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch(() =>
-      res.status(serverError).send({ message: "Произошла ошибка на сервере" })
-    );
+    .catch(() => {
+      res.status(serverError).send({ message: 'Произошла ошибка на сервере' });
+    });
 };
 
 module.exports.createCard = (req, res) => {
@@ -19,12 +19,12 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(badRequest).send({ message: `Некорректные данные` });
+      if (err.name === 'ValidationError') {
+        res.status(badRequest).send({ message: 'Некорректные данные' });
       } else {
         res
           .status(serverError)
-          .send({ message: "Произошла ошибка на сервере" });
+          .send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
@@ -33,18 +33,18 @@ module.exports.deleteCardById = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(notFound).send({ message: "карточку потеряли" });
+        res.status(notFound).send({ message: 'карточку потеряли' });
       } else {
         res.status(ok).send({ data: card });
       }
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(badRequest).send({ message: "Невалидный id " });
+      if (err.name === 'CastError') {
+        res.status(badRequest).send({ message: 'Невалидный id' });
       } else {
         res
           .status(serverError)
-          .send({ message: "Произошла ошибка на сервере" });
+          .send({ message: 'Произошла ошибка на сервере' });
       }
     });
 };
@@ -85,22 +85,22 @@ module.exports.unlikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(notFound).send({ message: "карточку потеряли" });
+        res.status(notFound).send({ message: 'карточку потеряли' });
       } else {
         res.status(ok).send({ data: card });
       }
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res
           .status(badRequest)
-          .send({ message: "Миша, карточки не очень, переделывай" });
-      } else if (err.name === "CastError") {
+          .send({ message: 'Миша, карточки не очень, переделывай' });
+      } else if (err.name === 'CastError') {
         res
           .status(badRequest)
-          .send({ message: "Передан невалидный id карточки" });
+          .send({ message: 'Передан невалидный id карточки' });
       } else {
-        res.status(internalServerError).send({ message: `${err.message}` });
+        res.status(serverError).send({ message: `${err.message}` });
       }
     });
 };
