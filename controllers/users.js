@@ -18,10 +18,11 @@ module.exports.getUserById = (req, res) => {
     .then((users) => {
       if (!users) {
         res.status(notFound).send({ message: "Такого пользователя нет" });
+      } else {
+        res.send(users);
       }
-      res.send(users[req.params.id]);
     })
-    .catch(() => {
+    .catch((err) => {
       if (err.name === 'CastError') {
         res.status(badRequest).send({ message: 'Невалидный id ' });
       } else {
@@ -35,8 +36,8 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch(() => {
-      if (err.name === 'CastError') {
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
         res.status(badRequest).send({ message: 'Невалидный id ' });
       } else {
         res.status(serverError).send({ message: "Произошла ошибка на сервере" });

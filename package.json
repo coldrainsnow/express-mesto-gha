@@ -4,13 +4,13 @@
   "description": "",
   "main": "app.cjs",
   "scripts": {
-    "start": "node app.cjs",
-    "dev": "nodemon app.cjs",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Nick",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.1",
