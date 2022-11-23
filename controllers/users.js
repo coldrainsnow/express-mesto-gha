@@ -23,10 +23,12 @@ module.exports.getUserById = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(badRequest).send({ message: 'Невалидный id ' });
+      if (err.name === "CastError") {
+        res.status(badRequest).send({ message: "Невалидный id " });
       } else {
-        res.status(serverError).send({ message: "Произошла ошибка на сервере" });
+        res
+          .status(serverError)
+          .send({ message: "Произошла ошибка на сервере" });
       }
     });
 };
@@ -37,10 +39,12 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(badRequest).send({ message: 'Невалидный id ' });
+      if (err.name === "ValidationError") {
+        res.status(badRequest).send({ message: "Невалидный id " });
       } else {
-        res.status(serverError).send({ message: "Произошла ошибка на сервере" });
+        res
+          .status(serverError)
+          .send({ message: "Произошла ошибка на сервере" });
       }
     });
 };
