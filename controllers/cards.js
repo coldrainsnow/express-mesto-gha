@@ -1,4 +1,4 @@
-const Card = require("../models/card");
+const Card = require('../models/card');
 
 const serverError = 500;
 const badRequest = 400;
@@ -53,26 +53,26 @@ module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
-        res.status(notFound).send({ message: "карточку потеряли" });
+        res.status(notFound).send({ message: 'карточку потеряли' });
       } else {
         res.status(ok).send({ data: card });
       }
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res
           .status(badRequest)
-          .send({ message: "Миша, карточки не очень, переделывай" });
-      } else if (err.name === "CastError") {
+          .send({ message: 'Миша, карточки не очень, переделывай' });
+      } else if (err.name === 'CastError') {
         res
           .status(badRequest)
-          .send({ message: "Передан невалидный id карточки" });
+          .send({ message: 'Передан невалидный id карточки' });
       } else {
-        res.status(internalServerError).send({ message: `${err.message}` });
+        res.status(serverError).send({ message: `${err.message}` });
       }
     });
 };
@@ -81,7 +81,7 @@ module.exports.unlikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {

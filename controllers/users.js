@@ -9,8 +9,7 @@ module.exports.getAllUsers = (req, res) => {
     .then((users) => res.send({ data: users }))
     .catch(() => {
       res.status(serverError).send({ message: 'Произошла ошибка на сервере' })
-    }
-    );
+    });
 };
 
 module.exports.getUserById = (req, res) => {
