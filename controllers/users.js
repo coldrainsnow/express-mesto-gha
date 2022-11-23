@@ -8,7 +8,7 @@ module.exports.getAllUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch(() => {
-      res.status(serverError).send({ message: 'Произошла ошибка на сервере' })
+      res.status(serverError).send({ message: 'Произошла ошибка на сервере' });
     });
 };
 
@@ -23,7 +23,7 @@ module.exports.getUserById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(badRequest).send({ message: 'Невалидный id'  });
+        res.status(badRequest).send({ message: 'Невалидный id' });
       } else {
         res
           .status(serverError)
@@ -39,7 +39,7 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(badRequest).send({ message: 'Невалидный id'  });
+        res.status(badRequest).send({ message: 'Невалидный id' });
       } else {
         res
           .status(serverError)
@@ -58,7 +58,7 @@ module.exports.updateUserInfo = (req, res) => {
       new: true,
       runValidators: true,
       upsert: false,
-    }
+    },
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
@@ -82,7 +82,7 @@ module.exports.updateUserAvatar = (req, res) => {
       new: true,
       runValidators: true,
       upsert: false,
-    }
+    },
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
