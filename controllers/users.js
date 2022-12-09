@@ -1,6 +1,4 @@
-const { NODE_ENV, SECRET_KEY } = process.env;
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const serverError = 500;
@@ -137,24 +135,4 @@ module.exports.updateUserAvatar = (req, res, next) => {
         res.status(serverError).send({ message: `${err.message}` });
       }
     });
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  User.findUserByCredentials(email, password)
-    .then((user) => {
-      if (!user) {
-        res.status(notFound).send({ message: "Пользователь не найден" });
-      }
-
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === "production" ? SECRET_KEY : "dev-key",
-        { expiresIn: "2d" }
-      );
-
-      res.send({ token });
-    })
-    .catch(next);
 };

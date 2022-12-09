@@ -3,7 +3,8 @@ const { celebrate, Joi, Segments } = require("celebrate");
 const userRouter = require("./users");
 const cardRouter = require("./cards");
 const auth = require("../middlewares/auth");
-const { login, createUser } = require("../controllers/users");
+const { login } = require("../controllers/login");
+const { createUser } = require("../controllers/users");
 const { URL_REGEX } = require("../utils/constants");
 
 router.post(
