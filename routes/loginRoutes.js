@@ -35,7 +35,7 @@ router.use("/users", userRouter);
 router.use("/cards", cardRouter);
 
 router.use("/", (req, res, next) => {
-  next(console.log("Страница не найдена"));
+  next(res.status(401).send({ message: "Необходима авторизация" }));
 });
 
 module.exports = router;
