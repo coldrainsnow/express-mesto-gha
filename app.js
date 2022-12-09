@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { errors } = require("celebrate");
 const routes = require("./routes/loginRoutes");
+const { login } = require('./controllers/login');
 
 const { PORT = 3000 } = process.env;
 
