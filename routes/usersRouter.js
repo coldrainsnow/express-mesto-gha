@@ -1,4 +1,6 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const { celebrate, Joi, Segments } = require("celebrate");
+const { URL_REGEX } = require("../utils/constants");
 
 const {
   getAllUsers,
@@ -6,12 +8,37 @@ const {
   createUser,
   updateUserInfo,
   updateUserAvatar,
-} = require('../controllers/users');
+} = require("../controllers/users");
 
-router.get('/', getAllUsers);
-router.get('/:userId', getUserById);
-router.post('/', createUser);
-router.patch('/me', updateUserInfo);
-router.patch('/me/avatar', updateUserAvatar);
+router.get("/", getAllUsers);
+router.get(
+  "/:userId",
+  celebrate({
+    [Segments.PARAMS]: Joi.object().keys({
+      userId: Joi.string().required().length(24).hex(),
+    }),
+  }),
+  getUserById
+);
+router.post("/", createUser);
+router.patch(
+  "/me",
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      about: Joi.string().required().min(2).max(30),
+    }),
+  }),
+  updateUserInfo
+);
+router.patch(
+  "/me/avatar",
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      avatar: Joi.string().required().regex(URL_REGEX),
+    }),
+  }),
+  updateUserAvatar
+);
 
 module.exports = router;

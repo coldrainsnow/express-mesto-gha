@@ -1,34 +1,31 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-
-const userRouter = require('./routes/usersRouter');
-const cardsRouter = require('./routes/cardsRouter');
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const { errors } = require("celebrate");
+const routes = require("./routes/routes");
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect("mongodb://localhost:27017/mestodb", {
   useNewUrlParser: true,
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '637c9cc6e0b8a01a0e479f64',
-  };
+app.use(routes);
 
+app.use(errors());
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  res.status(statusCode).send({
+    message: statusCode === 500 ? "На сервере произошла ошибка" : message,
+  });
   next();
-});
-
-app.use('/users', userRouter);
-app.use('/cards', cardsRouter);
-
-app.use((req, res) => {
-  res.status(404).send({ message: 'Страница не найдена' });
 });
 
 app.listen(PORT);
