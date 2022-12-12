@@ -2,11 +2,8 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 const NotFoundError = require('../errors/notFoundError');
-const BadRequestError = require('../errors/badRequestError');
+const BadRequestError = require('../errors/badRequest');
 
-const serverError = 500;
-const badRequestError = 400;
-const notFound = 404;
 const created = 201;
 
 module.exports.getAllUsers = (req, res, next) => {
@@ -15,7 +12,7 @@ module.exports.getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((users) => {
       if (!users) {
@@ -28,6 +25,7 @@ module.exports.getUserById = (req, res) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Ошибка в запросе'));
       } else {
+        next(err);
       }
     });
 };

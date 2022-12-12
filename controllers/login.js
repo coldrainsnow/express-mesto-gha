@@ -6,19 +6,10 @@ module.exports.login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
-        { expiresIn: '7d' }
-      );
-      res
-        .cookie('jwt', token, {
-          maxAge: 60 * 60 * 7 * 24,
-          httpOnly: true,
-          sameSite: true,
-        })
-        .send({ message: 'Вы успешно авторизовались!' })
-        .end();
+      const token = jwt.sign({ _id: user._id }, 'secret-key', {
+        expiresIn: '7d',
+      });
+      res.cookie({ httpOnly: true }).send({ token });
     })
     .catch(next);
 };
