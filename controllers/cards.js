@@ -27,24 +27,6 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCardById = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        next(new NotFoundError('карточку потеряли'));
-      } else {
-        res.status(ok).send({ data: card });
-      }
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Невалидный id'));
-      } else {
-        next(err);
-      }
-    });
-};
-
-module.exports.deleteCardById = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findById(cardId)
@@ -71,8 +53,6 @@ module.exports.deleteCardById = (req, res, next) => {
             `Передан некорректны id: ${cardId} в методы удаления карточки`
           )
         );
-      } else if (err.name === 'NotFoundError') {
-        next(new NotFoundError(`Карточка с id: ${cardId} не найдена`));
       } else {
         next(err);
       }
