@@ -53,7 +53,13 @@ module.exports.deleteCardById = (req, res, next) => {
     })
     .then((card) => {
       if (card.owner.toString() === req.user._id) {
-        Card.findByIdAndRemove(cardId).then(() => res.send(card));
+        Card.findByIdAndRemove(cardId).then(() => res.send(card)).catch((err) => {
+          if (err.name === 'CastError') {
+            next(new BadRequestError('Миша, карточки не очень, переделывай'));
+          } else {
+            next(err);
+          }
+        });
       } else {
         throw new ForbiddenError('Нельзя удалять чужие карточки');
       }

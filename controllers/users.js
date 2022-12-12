@@ -41,31 +41,25 @@ module.exports.getCurrentUser = (req, res, next) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('Передан некорректный id пользователя'));
-      } else if (err.name === 'NotFoundError') {
-        next(new NotFoundError(`Пользователь c id: ${_id} не найден`));
-      } else {
-        next(err);
-      }
-    });
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password
+  } = req.body;
 
   bcrypt
     .hash(password, 12)
-    .then((hash) =>
+    .then((hash) => {
       User.create({
         name,
         about,
         avatar,
         email,
         password: hash,
-      })
-    )
+      });
+    })
     .then((user) => {
       const { password: removed, ...rest } = user.toObject();
       return res.status(created).send({ data: rest });
@@ -101,7 +95,13 @@ module.exports.updateUserInfo = (req, res, next) => {
       upsert: false,
     }
   )
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError(`Пользователь с id: ${req.user._id} не найден`);
+      } else {
+        res.send({ data: user });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(
@@ -109,8 +109,6 @@ module.exports.updateUserInfo = (req, res, next) => {
             'Переданы некорректные данные в методы обновления профиля'
           )
         );
-      } else if (err.name === 'CastError') {
-        next(new NotFoundError(`Пользователь c id: ${req.user._id} не найден`));
       } else {
         next(err);
       }
@@ -140,8 +138,6 @@ module.exports.updateUserAvatar = (req, res, next) => {
             'Переданы некорректные данные в методы обновления аватара пользователя'
           )
         );
-      } else if (err.name === 'CastError') {
-        next(new BadRequestError('Ошибка в id пользователя'));
       } else {
         next(err);
       }
