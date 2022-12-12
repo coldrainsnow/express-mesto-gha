@@ -3,6 +3,7 @@ const User = require('../models/user');
 
 const NotFoundError = require('../errors/notFoundError');
 const BadRequestError = require('../errors/badRequest');
+const ExistError = require('../errors/existError');
 
 const created = 201;
 
@@ -51,7 +52,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
   bcrypt
@@ -78,7 +79,7 @@ module.exports.createUser = (req, res) => {
         );
       } else if (err.code === 11000) {
         next(
-          new ConflictError(
+          new ExistError(
             'Пользователь с таким электронным адресом уже существует'
           )
         );
@@ -88,7 +89,7 @@ module.exports.createUser = (req, res) => {
     });
 };
 
-module.exports.updateUserInfo = (req, res) => {
+module.exports.updateUserInfo = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
@@ -116,7 +117,7 @@ module.exports.updateUserInfo = (req, res) => {
     });
 };
 
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
