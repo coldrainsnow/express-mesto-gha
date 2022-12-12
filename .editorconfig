@@ -8,6 +8,8 @@ indent_style = space
 indent_size = 2
 end_of_line = lf
 charset = utf-8
+quote_type = single
+trailing_comma = true
 
 # Denotes whether to trim whitespace at the end of lines
 # Possible values - true, false

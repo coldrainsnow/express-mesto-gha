@@ -1,6 +1,6 @@
-const router = require("express").Router();
-const { celebrate, Joi, Segments } = require("celebrate");
-const { URL_REGEX } = require("../utils/constants");
+const router = require('express').Router();
+const { celebrate, Joi, Segments } = require('celebrate');
+const { URL_REGEX } = require('../utils/constants');
 
 const {
   getAllUsers,
@@ -8,11 +8,11 @@ const {
   createUser,
   updateUserInfo,
   updateUserAvatar,
-} = require("../controllers/users");
+} = require('../controllers/users');
 
-router.get("/", getAllUsers);
+router.get('/', getAllUsers);
 router.get(
-  "/:userId",
+  '/:userId',
   celebrate({
     [Segments.PARAMS]: Joi.object().keys({
       userId: Joi.string().required().length(24).hex(),
@@ -20,9 +20,9 @@ router.get(
   }),
   getUserById
 );
-router.post("/", createUser);
+router.post('/', createUser);
 router.patch(
-  "/me",
+  '/me',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       name: Joi.string().required().min(2).max(30),
@@ -32,7 +32,7 @@ router.patch(
   updateUserInfo
 );
 router.patch(
-  "/me/avatar",
+  '/me/avatar',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       avatar: Joi.string().required().regex(URL_REGEX),

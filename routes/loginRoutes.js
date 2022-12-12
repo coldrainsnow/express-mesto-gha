@@ -1,14 +1,14 @@
-const router = require("express").Router();
-const { celebrate, Joi, Segments } = require("celebrate");
-const userRouter = require("./users");
-const cardRouter = require("./cards");
-const auth = require("../middlewares/auth");
-const { login } = require("../controllers/login");
-const { createUser } = require("../controllers/users");
-const { URL_REGEX } = require("../utils/constants");
+const router = require('express').Router();
+const { celebrate, Joi, Segments } = require('celebrate');
+const userRouter = require('./usersRouter');
+const cardRouter = require('./cardsRouter');
+const auth = require('../middlewares/auth');
+const { login } = require('../controllers/login');
+const { createUser } = require('../controllers/users');
+const { URL_REGEX } = require('../utils/constants');
 
 router.post(
-  "/signup",
+  '/signup',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -21,7 +21,7 @@ router.post(
   createUser
 );
 router.post(
-  "/signin",
+  '/signin',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -32,11 +32,11 @@ router.post(
 );
 
 router.use(auth);
-router.use("/users", userRouter);
-router.use("/cards", cardRouter);
+router.use('/users', userRouter);
+router.use('/cards', cardRouter);
 
-router.use("/", (req, res, next) => {
-  next(res.status(401).send({ message: "Необходима авторизация" }));
+router.use('/', (req, res, next) => {
+  next(res.status(404).send({ message: 'Страница не найдена' }));
 });
 
 module.exports = router;

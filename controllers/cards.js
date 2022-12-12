@@ -53,7 +53,7 @@ module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
     .then((card) => {
       if (!card) {
@@ -63,14 +63,10 @@ module.exports.likeCard = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         res
           .status(badRequest)
           .send({ message: 'Миша, карточки не очень, переделывай' });
-      } else if (err.name === 'CastError') {
-        res
-          .status(badRequest)
-          .send({ message: 'Передан невалидный id карточки' });
       } else {
         res.status(serverError).send({ message: `${err.message}` });
       }
@@ -81,7 +77,7 @@ module.exports.unlikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
     .then((card) => {
       if (!card) {
@@ -91,14 +87,10 @@ module.exports.unlikeCard = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         res
           .status(badRequest)
           .send({ message: 'Миша, карточки не очень, переделывай' });
-      } else if (err.name === 'CastError') {
-        res
-          .status(badRequest)
-          .send({ message: 'Передан невалидный id карточки' });
       } else {
         res.status(serverError).send({ message: `${err.message}` });
       }
